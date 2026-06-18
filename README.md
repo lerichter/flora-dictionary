@@ -1,437 +1,428 @@
-## Introdução
+# Flora Dictionary
 
-Este é um teste para que possamos verificar as suas habilidades como desenvolvedor de software.
+Aplicação web desenvolvida em **Next.js 15** para consulta de palavras em inglês, visualização de fonética, definições, exemplos, sinônimos, histórico de pesquisas e gerenciamento de palavras favoritas.
 
-Nesse teste você deverá desenvolver um aplicativo para listar palavras em inglês, utilizando como base a API [Free Dictionary API](https://dictionaryapi.dev/). O projeto a ser desenvolvido por você tem como objetivo exibir termos em inglês e gerenciar as palavras visualizadas, conforme indicado nos casos de uso que estão logo abaixo.
+O projeto foi desenvolvido como avaliação técnica front-end, com foco em experiência do usuário, componentização, TypeScript, App Router, boas práticas de organização, consumo de API externa, acessibilidade, testes básicos e layout responsivo.
 
-As instruções de entrega e apresentação do challenge estão no final deste Readme.
+## Funcionalidades implementadas
 
-### Antes de começar
+* Cadastro de usuário com validação client-side.
+* Login com validação de campos, feedback de erro e redirecionamento após autenticação.
+* Criação de token simulado via cookie HTTP-only.
+* Logout com remoção do cookie e redirecionamento para a tela de login.
+* Proteção visual das rotas internas.
+* Dashboard com acesso ao dicionário, favoritos e histórico.
+* Busca de palavras em inglês com debounce.
+* Histórico de pesquisas recentes por usuário.
+* Consulta de detalhes da palavra usando API externa.
+* Exibição de:
 
-- O projeto deve utilizar como linguagem principal Node.js com banco de dados de sua preferência. Sugestão: PostgreSQL
+  * palavra;
+  * fonética;
+  * áudio de pronúncia, quando disponível;
+  * definições;
+  * exemplos;
+  * sinônimos.
+* Botão para favoritar e desfavoritar palavras com feedback visual.
+* Página de favoritos com:
 
-- Aplicação de padrões de desenvolvimento, clean code e validações de chamadas são tão importantes quanto a aplicação em si e serão levados em consideração na avaliação
+  * listagem de todas as palavras favoritadas;
+  * remoção direta de favoritos;
+  * link para abrir os detalhes da palavra;
+  * exibição progressiva dos favoritos.
+* Dicionário completo com:
 
-- Reserve ao menos um ou períodos do seu dia para realizar este teste. Caso não consiga realizar o teste e não seja possível concluir dentro de até 72 horas entre em contato através do e-mail: thaisa.ponzio@floraenergia.com.br para receber instruções sobre o que fazer.
+  * listagem paginada de palavras;
+  * filtro textual;
+  * filtro por letra do alfabeto;
+  * botão para limpar filtro;
+  * modal de detalhes ao clicar em uma palavra.
+* Tema claro e escuro com `next-themes`.
+* Alternância manual entre tema light e dark.
+* Layout responsivo para desktop e mobile.
+* Estados de loading, erro e empty state nos principais fluxos.
+* Componentização de telas, cards, formulários, estados visuais, filtros, paginação e regras de armazenamento.
+* Testes básicos de formulário e estado vazio com Vitest e React Testing Library.
 
-- Procure documentar sua aplicação de forma que o avaliador não tenha dificuldade no entendimento dela.
+## Stack utilizada
 
-## O Teste
+* [Next.js](https://nextjs.org/) 15
+* React
+* TypeScript
+* Tailwind CSS
+* App Router
+* Lucide React
+* Sonner
+* next-themes
+* Free Dictionary API
+* Vitest
+* React Testing Library
+* Testing Library user-event
+* Testing Library jest-dom
+* jsdom
 
-### Modelo de Dados:
+## Estrutura principal do projeto
 
-<details close>
+```txt
+app/
+  api/
+    auth/
+      login/
+      logout/
+  dashboard/
+  dictionary/
+  favorites/
+  login/
+  signup/
 
-Conforme indicado na documentação da API, a API retorna as informações de uma palavra, tais como etimologia, sinônimos, exemplos de uso, etc. Utilize os campos indicados na documentação dos endpoints para obter os dados necessários.
+components/
+  auth/
+  dashboard/
+  layout/
+  providers/
+  ui/
+  word/
 
-</details>
+data/
+  words.ts
 
-### Back-End:
+hooks/
+  use-debounce.ts
 
-<details close>
+lib/
+  auth-storage.ts
+  favorites-storage.ts
+  recent-searches-storage.ts
 
-Nessa etapa você deverá construir uma API Restful com as melhores práticas de desenvolvimento.
+services/
+  dictionary-service.ts
+  words-service.ts
 
-**Obrigatório 1** - Você deverá atender aos seguintes casos de uso:
-
-- Como usuário, devo ser capaz de realizar login com usuário e senha
-
-- Como usuário, devo ser capaz de visualizar a lista de palavras do dicionário
-
-- Como usuário, devo ser capaz de visualizar o detalhes de uma palavra do dicionário
-
-- Como usuário, devo ser capaz de guardar no histórico palavras já visualizadas
-
-- Como usuário, devo ser capaz de visualizar o histórico de palavras já visualizadas
-
-- Como usuário, deve ser capaz de guardar uma palavra como favorita
-
-- Como usuário, deve ser capaz de apagar uma palavra favorita
-
-- Internamente, a API deve fazer proxy da Words API, pois assim o front irá acessar somente a sua API
-
-**Obrigatório 2** - Você deverá desenvolver as seguintes rotas com suas requisições e respostas:
-
-<details close>
-
-<summary>[GET] /</summary>
-
-<p>
-
-Retornar a mensagem "English Dictionary"
-
-</p>
-
-```json
-{
-  "message": "English Dictionary"
-}
+types/
+  dictionary.ts
+  favorite.ts
+  recent-search.ts
 ```
 
-</details>
+## Principais decisões técnicas
 
-<details close>
+### Next.js App Router
 
-<summary>[POST] /auth/signup</summary>
+O projeto utiliza o **App Router** do Next.js, mantendo as páginas dentro da pasta `app/`.
 
-```json
-{
-  "name": "User 1",
+As páginas são mantidas como Server Components sempre que possível, enquanto componentes com interação, estado, acesso ao `localStorage`, eventos de clique ou hooks de navegação utilizam `"use client"`.
 
-  "email": "example@email.com",
+### TypeScript
 
-  "password": "test"
-}
+A aplicação foi desenvolvida com TypeScript, incluindo tipos específicos para:
+
+* entradas do dicionário;
+* favoritos;
+* histórico de buscas;
+* usuários cadastrados;
+* respostas paginadas da listagem de palavras.
+
+### Tema light e dark
+
+O projeto possui suporte a **tema claro e escuro** utilizando `next-themes`.
+
+A alternância de tema é feita manualmente pelo usuário por meio de um botão flutuante na interface. O tema é aplicado por classe no HTML, permitindo estilização com Tailwind CSS usando variantes `dark`.
+
+Também foi utilizado `suppressHydrationWarning` no layout para evitar inconsistências de hidratação relacionadas ao tema e a extensões do navegador que podem injetar atributos no HTML.
+
+### Autenticação e sessão
+
+A autenticação foi implementada de forma simulada para fins de avaliação técnica front-end.
+
+O cadastro de usuários é salvo no `localStorage`. No login, a aplicação chama uma rota interna:
+
+```txt
+POST /api/auth/login
 ```
 
-```json
-{
-  "id": "f3a106sa65dv53ab2c1380acef",
+Essa rota cria um cookie HTTP-only chamado:
 
-  "name": "User 1",
-
-  "token": "Bearer JWT.Token"
-}
+```txt
+flora_token
 ```
 
-</details>
+O logout chama:
 
-<details close>
-
-<summary>[POST] /auth/signin</summary>
-
-```json
-{
-  "email": "example@email.com",
-
-  "password": "test"
-}
+```txt
+POST /api/auth/logout
 ```
 
-```json
-{
-  "id": "f3a106sa65dv53ab2c1380acef",
+E remove o cookie da sessão, além de redirecionar o usuário para a tela de login.
 
-  "name": "User 1",
+Em um ambiente real, essa estrutura poderia ser integrada a um backend com geração de JWT real, persistência de usuários e validação de credenciais no servidor.
 
-  "token": "Bearer JWT.Token"
-}
+### Armazenamento por usuário
+
+Favoritos e histórico de buscas são armazenados no `localStorage`, com chave separada por usuário autenticado. Isso evita que favoritos e histórico de um usuário apareçam para outro.
+
+### Consumo da API externa
+
+Os detalhes das palavras são buscados por meio da Free Dictionary API:
+
+```txt
+https://api.dictionaryapi.dev/api/v2/entries/en/{word}
 ```
 
-</details>
+A API pública utilizada fornece detalhes por palavra, mas não disponibiliza um endpoint oficial para listagem completa e paginada de todas as palavras.
 
-<details close>
+Por isso, a listagem do dicionário completo foi implementada com uma base local em:
 
-<summary>[GET] /entries/en</summary>
-
-<p>
-
-Retornar a lista de palavras do dicionário, com paginação e suporte a busca. O endpoint de paginação de uma busca hipotética deve retornar a seguinte estrutura:
-
-<br/>
-
-[GET]/entries/en?search=fire&limit=4
-
-</p>
-
-```json
-{
-  "results": ["fire", "firefly", "fireplace", "fireman"],
-
-  "totalDocs": 20,
-
-  "page": 1,
-
-  "totalPages": 5,
-
-  "hasNext": true,
-
-  "hasPrev": false
-}
+```txt
+data/words.ts
 ```
 
-</details>
+Essa base é acessada por meio de uma camada de service:
 
-<details close>
-
-<summary>[GET] /entries/en/:word</summary>
-
-<p>
-
-Retornar as informações da palavra especificada e registrar no histórico de acesso.
-
-</p>
-
-</details>
-
-<details close>
-
-<summary>[POST] /entries/en/:word/favorite</summary>
-
-<p>
-
-Salva a palavra na lista de favoritas (retorno de dados no body é opcional)
-
-</p>
-
-</details>
-
-<details close>
-
-<summary>[DELETE] /entries/en/:word/unfavorite</summary>
-
-<p>
-
-Remover a palavra da lista de favoritas (retorno de dados no body é opcional)
-
-</p>
-
-</details>
-
-<details close>
-
-<summary>[GET] /user/me</summary>
-
-<p>
-
-Retornar o perfil do usúario
-
-</p>
-
-</details>
-
-<details close>
-
-<summary>[GET] /user/me/history</summary>
-
-<p>
-
-Retornar a lista de palavras visitadas
-
-</p>
-
-```json
-{
-  "results": [
-    {
-      "word": "fire",
-
-      "added": "2024-05-05T19:28:13.531Z"
-    },
-
-    {
-      "word": "firefly",
-
-      "added": "2024-05-05T19:28:44.021Z"
-    },
-
-    {
-      "word": "fireplace",
-
-      "added": "2024-05-05T19:29:28.631Z"
-    },
-
-    {
-      "word": "fireman",
-
-      "added": "2024-05-05T19:30:03.711Z"
-    }
-  ],
-
-  "totalDocs": 20,
-
-  "page": 2,
-
-  "totalPages": 5,
-
-  "hasNext": true,
-
-  "hasPrev": true
-}
+```txt
+services/words-service.ts
 ```
 
-</details>
+Dessa forma, a aplicação fica preparada para trocar a fonte local por uma API real no futuro, sem alterar o componente de interface.
 
-<details close>
+Hoje a estrutura funciona assim:
 
-<summary>[GET] /user/me/favorites</summary>
-
-<p>
-
-Retornar a lista de palavras marcadas como favoritas
-
-</p>
-
-```json
-{
-  "results": [
-    {
-      "word": "fire",
-
-      "added": "2024-05-05T19:30:23.928Z"
-    },
-
-    {
-      "word": "firefly",
-
-      "added": "2024-05-05T19:30:24.088Z"
-    },
-
-    {
-      "word": "fireplace",
-
-      "added": "2024-05-05T19:30:28.963Z"
-    },
-
-    {
-      "word": "fireman",
-
-      "added": "2024-05-05T19:30:33.121Z"
-    }
-  ],
-
-  "totalDocs": 20,
-
-  "page": 2,
-
-  "totalPages": 5,
-
-  "hasNext": true,
-
-  "hasPrev": true
-}
+```txt
+CompleteDictionary
+  -> getPaginatedWords()
+    -> data/words.ts
 ```
 
-</details>
+Em uma API real, bastaria alterar o service para algo como:
 
-Além disso, os endpoints devem utilizar os seguintes códigos de status:
-
-- 200: sucesso com body ou sem body
-
-- 204: sucesso sem body
-
-- 400: mensagem de erro em formato humanizado, ou seja, sem informações internas e códigos de erro:
-
-```json
-{
-  "message": "Error message"
-}
+```txt
+CompleteDictionary
+  -> getPaginatedWords()
+    -> GET /api/words?page=1&limit=12&search=energy
 ```
 
-**Obrigatório 3** - Você deve criar um script para baixar a lista de palavras do repositório e importar estas palavras para o banco de dados. A API não possui endpoint com a lista de palavras. Para criar seu endpoint será necessário alimentar o seu banco de dados com o [arquivo existente dentro do projeto no Github](https://github.com/dwyl/english-words/blob/master/words_dictionary.json).
+### Componentização
 
-**Obrigatório 4** - Salvar em cache o resultado das requisições a API, para agilizar a resposta em caso de buscas com parâmetros repetidos. Sugestões são usar o Redis e/ou MongoDB;
+O projeto foi organizado para separar responsabilidades entre telas, componentes visuais, services e helpers.
 
-O cache pode ser feito para guardar todo o corpo das respostas ou para guardar o resultado das queries do banco. Para identificar a presença de cache, será necessário adicionar os seguintes headers nas respostas:
+Exemplos de componentes criados:
 
-- x-cache: valores HIT (retornou dados em cache) ou MISS (precisou buscar no banco)
-
-- x-response-time: duração da requisição em milissegundos
-
-**Diferenciais:**
-
-- **Descrever a documentação da API** utilizando o conceito de close API 3.0;
-
-- **Escrever Unit Tests** para os endpoints da API;
-
-- **Configurar Docker no Projeto** para facilitar o Deploy da equipe de DevOps;
-
-- **Deploy em algum servidor**, com ou sem automatização do CI;
-
-- Implementar um método de comunicação assíncrona para persistir palavras favoritas;
-
-- **Implementar paginação com cursores** ao inves de usar page e limit . Ao realizar este diferencial, o retorno dos endpoints deve possuir a seguinte estrutura:
-
-```json
-{
-  "results": ["fire", "firefly", "fireplace", "fireman"],
-
-  "totalDocs": 20,
-
-  "previous": "eyIkb2lkIjoiNTgwZmQxNmjJkOGI5In0",
-
-  "next": "eyIkb2lkIjoiNTgwZmQxNm1NjJkOGI4In0",
-
-  "hasNext": true,
-
-  "hasPrev": true
-}
+```txt
+components/word/dictionary-search.tsx
+components/word/recent-searches-card.tsx
+components/word/word-details-card.tsx
+components/word/word-loading-state.tsx
+components/word/word-error-state.tsx
+components/word/word-empty-state.tsx
+components/word/favorites-list.tsx
+components/word/favorite-word-card.tsx
+components/word/favorites-empty-state.tsx
+components/word/complete-dictionary.tsx
+components/word/word-details-modal.tsx
+components/word/alphabet-filter.tsx
 ```
 
-</details>
+Também foram criados componentes reutilizáveis para formulário, layout, dashboard, busca e paginação:
 
-### Front-End (Somente vaga Full-Stack):
+```txt
+components/ui/form-field.tsx
+components/ui/form-error.tsx
+components/ui/submit-button.tsx
+components/ui/search-input.tsx
+components/ui/pagination-controls.tsx
+components/layout/auth-page-layout.tsx
+components/layout/page-header.tsx
+components/dashboard/dashboard-card.tsx
+```
 
-<details close>
+### Acessibilidade
 
-**Objetivo:** Construir uma aplicação Next.js v15 com App Router para consulta e gerenciamento de palavras de um dicionário, utilizando o backend previamente criado.
+Foram aplicadas boas práticas de acessibilidade, incluindo:
 
-**Funcionalidades:**
+* uso de HTML semântico;
+* `aria-label` em botões de ação;
+* `aria-current` na navegação ativa;
+* `role="dialog"` e `aria-modal` no modal de detalhes;
+* `aria-labelledby` no modal;
+* fechamento do modal com tecla `Esc`;
+* fechamento do modal ao clicar fora;
+* foco inicial no botão de fechar ao abrir o modal;
+* `aria-live` em estados de loading e erro;
+* botões com estados visuais de foco.
 
-1. **Tela de Cadastro**
+### Performance
 
-   - Permite que o usuário se cadastre na aplicação.
+Foram aplicadas melhorias de performance e experiência, incluindo:
 
-1. **Tela de Login**
+* busca com debounce;
+* uso de `useMemo` para dados derivados;
+* uso de `useCallback` em handlers reutilizados;
+* importação dinâmica do modal de detalhes;
+* separação de componentes para reduzir complexidade;
+* paginação da lista de palavras;
+* exibição progressiva da lista de favoritos.
 
-   - Permite que o usuário faça login na a aplicação usando email e senha.
+### Testes
 
-1. **Tela Inicial**
-   - **Campo de Pesquisa:** Permite ao usuário buscar uma nova palavra.
-   - **Histórico de Pesquisas:** Lista as palavras recentemente pesquisadas.
-     - Ao clicar em uma palavra do histórico, abre uma página com detalhes da palavra.
-1. **Página de Detalhes da Palavra**
+Foram adicionados testes básicos com **Vitest** e **React Testing Library**, cobrindo:
 
-   - Exibe as informações detalhadas da palavra pesquisada.
-   - Opção de **favoritar** ou **desfavoritar** a palavra.
+* renderização do formulário de login;
+* validação de campos obrigatórios no login;
+* validação de e-mail não cadastrado;
+* redirecionamento após login válido;
+* renderização do formulário de cadastro;
+* validação de campos obrigatórios no cadastro;
+* validação de senha curta;
+* salvamento de usuário após cadastro válido;
+* estado vazio da página de favoritos.
 
-1. **Lista de Palavras Favoritas**
+## Rotas da aplicação
 
-   - Exibe todas as palavras marcadas como favoritas.
-   - Permite **desfavoritar** uma palavra diretamente na lista.
-   - Ao clicar em uma palavra favorita, abre a página de detalhes.
+```txt
+/             Página inicial
+/signup       Cadastro
+/login        Login
+/dashboard    Painel logado
+/dictionary   Busca e dicionário completo
+/favorites    Palavras favoritas
+```
 
-1. **Lista Completa do Dicionário**
+## Como instalar e executar o projeto
 
-   - Mostra uma lista de todas as palavras disponíveis no dicionário.
-   - Ao clicar em uma palavra, abrir um modal com os detalhes.
+### 1. Clonar o repositório
 
-1. **Logout**
-   - Opção para que o usuário saia da aplicação.
+```bash
+git clone <URL_DO_REPOSITORIO>
+```
 
-**Requisitos Técnicos:**
+### 2. Entrar na pasta do projeto
 
-- A aplicação deve ser desenvolvida em **Next.js v15** utilizando o **App Router**.
-- Conectar-se ao backend previamente desenvolvido para realizar as operações de busca e autenticação.
+```bash
+cd flora-dictionary
+```
 
-**Diferenciais:**
+Caso o projeto esteja dentro de uma subpasta, entre na pasta onde está o `package.json`.
 
-- **Interface amigável e intuitiva** para melhor experiência do usuário.
-- **Deploy em um servidor público** (como Vercel, Netlify, ou AWS).
-- **Configuração Docker** para facilitar o deploy e integração com a equipe de DevOps.
+### 3. Instalar dependências
 
-</details>
+```bash
+npm install
+```
 
-## Armazene tudo no GitHub
+### 4. Configurar variáveis de ambiente
 
-- Faça o push do projeto em um repositório público no GitHub
+No estado atual do projeto, **não há variáveis de ambiente obrigatórias** para executar a aplicação localmente.
 
-- Não se esqueça de revisar se todos os arquivos subiram
+Mesmo assim, caso queira manter um arquivo de ambiente para evolução futura, crie:
 
-## Readme do Repositório
+```bash
+touch .env.local
+```
 
-- Deve conter o título do projeto
+Exemplo de `.env.local`:
 
-- Uma descrição sucinta sobre o projeto
+```env
+# Atualmente não há variáveis obrigatórias.
+# A API pública do dicionário é consumida diretamente pelo service.
+```
 
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
+### 5. Executar em ambiente de desenvolvimento
 
-- Como instalar e usar o projeto (instruções)
+```bash
+npm run dev
+```
 
-- Não esqueça o [.gitignore]
+A aplicação ficará disponível em:
 
-## Finalização
+```txt
+http://localhost:3000
+```
 
-1. Adicione o link do repositório com a sua solução no teste
+## Scripts disponíveis
 
-2. Envie e aguarde nosso retorno. Boa sorte!
+```bash
+npm run dev
+```
+
+Executa o projeto em modo de desenvolvimento.
+
+```bash
+npm run build
+```
+
+Gera a versão de produção.
+
+```bash
+npm run start
+```
+
+Executa a versão de produção após o build.
+
+```bash
+npm run lint
+```
+
+Executa a análise de lint do projeto.
+
+```bash
+npm run test
+```
+
+Executa os testes em modo interativo.
+
+```bash
+npm run test -- --run
+```
+
+Executa os testes uma única vez.
+
+```bash
+npm run test:watch
+```
+
+Executa os testes em modo watch.
+
+```bash
+npm run test:coverage
+```
+
+Executa os testes com relatório de cobertura.
+
+## Validação do projeto
+
+Os comandos abaixo foram executados com sucesso durante o desenvolvimento:
+
+```bash
+npm run test -- --run
+```
+
+```bash
+npm run lint
+```
+
+```bash
+npm run build
+```
+
+## Fluxo para testar manualmente
+
+1. Acesse `/signup`.
+2. Crie uma conta com nome, e-mail e senha.
+3. Faça login em `/login`.
+4. Acesse o dashboard.
+5. Entre no dicionário.
+6. Pesquise uma palavra em inglês.
+7. Favorite a palavra.
+8. Veja a palavra na página de favoritos.
+9. Volte ao dicionário e use a lista paginada.
+10. Use o filtro por texto.
+11. Use o filtro por letras do alfabeto.
+12. Clique em uma palavra da lista para abrir o modal de detalhes.
+13. Feche o modal pelo botão, pela tecla `Esc` ou clicando fora.
+14. Teste o tema claro e escuro.
+15. Teste o logout.
+
+## Observações
+
+Este projeto utiliza autenticação simulada e armazenamento local para fins de avaliação técnica front-end. Em um ambiente real, o cadastro, login, favoritos e histórico seriam persistidos em uma API/backend com banco de dados.
+
+A estrutura atual foi pensada para facilitar essa evolução, mantendo regras de dados em `services` e `lib`, e a interface organizada em componentes reutilizáveis.
