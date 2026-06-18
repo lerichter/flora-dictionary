@@ -1,16 +1,10 @@
 import Link from "next/link";
+import { PublicHeader } from "@/components/layout/public-header";
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-zinc-950 transition-colors dark:bg-[#13002E] dark:text-white">
-      <header className="border-b border-white/10 bg-[#6A00F4]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <Link href="/" className="flex items-center gap-2 text-3xl font-bold text-white">
-            <span className="text-[#5BFF5A]">✱</span>
-            flora dictionary
-          </Link>
-        </div>
-      </header>
+      <PublicHeader />
 
       <section className="mx-auto grid min-h-[calc(100vh-82px)] max-w-6xl items-center gap-12 px-6 py-16 lg:grid-cols-2">
         <div>

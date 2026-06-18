@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PublicHeader } from "@/components/layout/public-header";
 
 type AuthPageLayoutProps = {
   title: string;
@@ -23,17 +24,11 @@ export function AuthPageLayout({
 }: AuthPageLayoutProps) {
   return (
     <main className="min-h-screen bg-white text-zinc-950 transition-colors dark:bg-[#13002E] dark:text-white">
-      <section className="mx-auto grid min-h-screen max-w-6xl items-center gap-12 px-6 py-12 lg:grid-cols-2">
-        <div>
-          <Link
-            href="/"
-            className="mb-10 inline-flex items-center gap-2 text-3xl font-bold text-[#6A00F4] dark:text-white"
-          >
-            <span className="text-[#5BFF5A]">✱</span>
-            flora dictionary
-          </Link>
+      <PublicHeader />
 
-          <h1 className="max-w-xl text-5xl font-extrabold tracking-tight text-[#6A00F4] sm:text-6xl">
+      <section className="mx-auto grid min-h-[calc(100vh-77px)] max-w-6xl items-center gap-12 px-6 py-12 lg:grid-cols-2">
+        <div>
+          <h1 className="max-w-xl text-5xl font-extrabold tracking-tight text-[#6A00F4] sm:text-6xl dark:text-[#5BFF5A]">
             {title}
           </h1>
 
